@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build & Run",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/../../",
+            "console": "internalConsole",
+            "internalConsoleOptions":"neverOpen",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/../../RimWorldWin64.exe",
+                "preLaunchTask": "build",
+            },
+            "linux": {
+                "runtimeExecutable": "sh",
+                "runtimeArgs": [ 
+                    "-c", "if [ -f ./run.sh ]; then ./run.sh; else ./RimWorld; fi"
+                ],
+                "preLaunchTask": "build",
+            }
+        },  
+    ],
+    "compounds": [
+        {
+            "name": "Build & Debug",
+            "configurations": [
+                "Build & Run"
+            ],
+            "stopAll": true
+        },
+    ],
+}
