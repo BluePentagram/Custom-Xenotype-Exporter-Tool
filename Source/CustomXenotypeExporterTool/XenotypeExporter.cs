@@ -14,7 +14,7 @@ public static class XenotypeExporter
 
 	private static string aboutFolderName = "About";
 
-	private static string currentVersionName = "1.6";
+	private static string currentVersionName = VersionControl.CurrentVersionStringWithoutBuild ;
 
 	private static string defsFolderName = "Defs";
 
