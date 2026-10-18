@@ -2,7 +2,7 @@
 <LanguageData>
 	<XenotypeExporter>Xenotype Exporter</XenotypeExporter>
 	<ExportXenotype>Export xenotype</ExportXenotype>
-	<XenotypeDescription>Description (optional)</XenotypeDescription>
+	<XenotypeDescription>Description (must fill)</XenotypeDescription>
 	<XenotypeDescriptionShort>Short description (optional)</XenotypeDescriptionShort>
 	<CopyToClipboard>Copy to clipboard</CopyToClipboard>
 	<ExportToLocalModsFolder>Export to local Mods folder</ExportToLocalModsFolder>

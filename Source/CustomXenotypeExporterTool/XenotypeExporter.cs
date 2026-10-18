@@ -39,10 +39,6 @@ public static class XenotypeExporter
 		case ExportVariant.ToClipboard:
 			try
 			{
-				if (xenotypeName.Length == 0)
-				{
-					throw new ArgumentOutOfRangeException("Xenotype name cannot be empty");
-				}
 				GUIUtility.systemCopyBuffer = GenerateXenotypeDefFile(xenotypeName, icon, description, descriptionShort, geneList, inheritable).ToString();
 				Messages.Message("Copied".Translate(), MessageTypeDefOf.TaskCompletion, historical: false);
 				break;
@@ -58,6 +54,10 @@ public static class XenotypeExporter
 				if (xenotypeName.Length == 0)
 				{
 					throw new ArgumentOutOfRangeException("Xenotype name cannot be empty");
+				}
+				if (description.Length == 0)
+				{
+					throw new ArgumentOutOfRangeException("Description cannot be empty");
 				}
 				GetOrCreateStorageModFolders(out path, out path2, out path3, out path4);
 				GenerateAboutFile(path);
@@ -83,10 +83,6 @@ public static class XenotypeExporter
 				if (existingXenotype == null)
 				{
 					throw new ArgumentOutOfRangeException("Choose an existing xenotype");
-				}
-				if (xenotypeName.Length == 0)
-				{
-					throw new ArgumentOutOfRangeException("Xenotype name cannot be empty");
 				}
 				GetOrCreateStorageModFolders(out path, out path2, out path3, out path4);
 				GenerateAboutFile(path);
