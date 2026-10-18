@@ -10,21 +10,21 @@ namespace CustomXenotypeExporterTool;
 
 public static class XenotypeExporter
 {
-	private static string storageModFolderName = "ExportedXenotypeStorageModFolder";
+	private static readonly string storageModFolderName = "ExportedXenotypeStorageModFolder";
 
-	private static string aboutFolderName = "About";
+	private static readonly string aboutFolderName = "About";
 
-	private static string currentVersionName = VersionControl.CurrentVersionStringWithoutBuild ;
+	private static readonly string currentVersionName = VersionControl.CurrentVersionStringWithoutBuild ;
 
-	private static string defsFolderName = "Defs";
+	private static readonly string defsFolderName = "Defs";
 
-	private static string xenotypeDefsFolderName = "XenotypeDefs";
+	private static readonly string xenotypeDefsFolderName = "XenotypeDefs";
 
-	private static string patchesFolderName = "Patches";
+	private static readonly string patchesFolderName = "Patches";
 
-	private static string aboutFileName = "About.xml";
+	private static readonly string aboutFileName = "About.xml";
 
-	private static string authorName = "Gege";
+	private static readonly string authorName = "Gege";
 
 	public static XenotypeDef existingXenotype;
 
@@ -39,6 +39,10 @@ public static class XenotypeExporter
 		case ExportVariant.ToClipboard:
 			try
 			{
+				if (xenotypeName.Length == 0)
+				{
+					throw new ArgumentOutOfRangeException("Xenotype name cannot be empty");
+				}
 				GUIUtility.systemCopyBuffer = GenerateXenotypeDefFile(xenotypeName, icon, description, descriptionShort, geneList, inheritable).ToString();
 				Messages.Message("Copied".Translate(), MessageTypeDefOf.TaskCompletion, historical: false);
 				break;
@@ -54,10 +58,6 @@ public static class XenotypeExporter
 				if (xenotypeName.Length == 0)
 				{
 					throw new ArgumentOutOfRangeException("Xenotype name cannot be empty");
-				}
-				if (description.Length == 0)
-				{
-					throw new ArgumentOutOfRangeException("Description cannot be empty");
 				}
 				GetOrCreateStorageModFolders(out path, out path2, out path3, out path4);
 				GenerateAboutFile(path);
@@ -83,6 +83,10 @@ public static class XenotypeExporter
 				if (existingXenotype == null)
 				{
 					throw new ArgumentOutOfRangeException("Choose an existing xenotype");
+				}
+				if (xenotypeName.Length == 0)
+				{
+					throw new ArgumentOutOfRangeException("Xenotype name cannot be empty");
 				}
 				GetOrCreateStorageModFolders(out path, out path2, out path3, out path4);
 				GenerateAboutFile(path);
@@ -164,8 +168,10 @@ public static class XenotypeExporter
 	{
 		string iconPath = icon.texPath;
 
-        if (DefDatabase<XenotypeDef>.GetNamed(xenotypeName) != null) 
-			{ iconPath = DefDatabase<XenotypeDef>.GetNamed(xenotypeName).iconPath; }
+        if (DefDatabase<XenotypeDef>.GetNamedSilentFail(xenotypeName) != null)
+		{ 
+			iconPath = DefDatabase<XenotypeDef>.GetNamed(xenotypeName).iconPath; 
+		}
 
 		XElement xElement = new XElement("XenotypeDef", new XElement("defName", "GegeXT_" + xenotypeName.Replace(" ", "")), new XElement("label", xenotypeName), new XElement("description", description), new XElement("descriptionShort", descriptionShort), new XElement("iconPath", iconPath), new XElement("inheritable", inheritable), new XElement("genes"));
 		XElement xElement2 = xElement.Element("genes");
