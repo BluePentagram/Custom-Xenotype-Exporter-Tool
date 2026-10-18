@@ -31,10 +31,6 @@ public class Dialog_ExportXenotype : Window
 
 	public override void DoWindowContents(Rect inRect)
 	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0040: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006a: Unknown result type (might be due to invalid IL or missing references)
 		Listing_Standard listing_Standard = new Listing_Standard();
 		listing_Standard.Begin(inRect);
 		listing_Standard.Label("XenotypeExporter".Translate());
