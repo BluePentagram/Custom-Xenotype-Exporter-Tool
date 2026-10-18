@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using RimWorld;
 using UnityEngine;
@@ -175,17 +176,29 @@ public static class XenotypeExporter
 
 		XElement xElement = new XElement("XenotypeDef", new XElement("defName", "GegeXT_" + xenotypeName.Replace(" ", "")), new XElement("label", xenotypeName), new XElement("description", description), new XElement("descriptionShort", descriptionShort), new XElement("iconPath", iconPath), new XElement("inheritable", inheritable), new XElement("genes"));
 		XElement xElement2 = xElement.Element("genes");
+
+		var geneAddedByCode = new List<GeneDef>();
 		foreach (GeneDef gene in geneList)
 		{
-			if (gene.modContentPack.IsCoreMod || gene.modContentPack.PackageId == "ludeon.rimworld.biotech")
-			//There is also IsOfficialMod, but maybe Ideo/Royalty/Anomaly will add genes in the future.
+			if (gene.modContentPack == null)
 			{
-				xElement2.Add(new XElement("li", gene.defName)); //original
+				xElement2.Add(new XElement("li", gene.defName)); // C# Added Gene that does not have modContentPack
+				geneAddedByCode.Add(gene);
+				continue;
 			}
-			else
+			if (gene.modContentPack.IsCoreMod || gene.modContentPack.PackageId == "ludeon.rimworld.biotech")
 			{
-				xElement2.Add(new XElement("li", new XAttribute("MayRequire", gene.modContentPack.PackageId), gene.defName));
-				//my version
+				xElement2.Add(new XElement("li", gene.defName)); //No additional DLC or Mod's need to be enabled for these versions
+				continue;
+			}
+			xElement2.Add(new XElement("li", new XAttribute("MayRequire", gene.modContentPack.PackageId), gene.defName)); // additional DLC or Mod's need to be enabled for these versions
+		}
+		if (!geneAddedByCode.Empty())
+		{
+			Log.Error("Exported Xenotype has genes have a Mod ID mostly due to be made by code functions. Printed Below");
+			foreach (GeneDef genestring in geneAddedByCode)
+			{
+				Log.Message(genestring);
 			}
 		}
 		return xElement;
