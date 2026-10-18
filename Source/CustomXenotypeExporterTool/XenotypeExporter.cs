@@ -206,64 +206,26 @@ public static class XenotypeExporter
 	public static void GeneratePatchFile(string xenotypeName, XenotypeIconDef icon, string description, string descriptionShort, List<GeneDef> geneList, bool inheritable, string patchesFolderLocation)
 	{
 		string fileName = Path.Combine(patchesFolderLocation, existingXenotype.defName + ".xml");
-		//string iconPath = icon.texPath;
-		string iconPath = existingXenotype.iconPath;
-        //if (DefDatabase<XenotypeDef>.GetNamedSilentFail(xenotypeName) != null)
-
-        //{ iconPath = DefDatabase<XenotypeDef>.GetNamed(xenotypeName).iconPath; }
-
-        XDocument xDocument = new XDocument(new XElement("Patch", 
-		// // Add The iconpath if missing
-		new XElement("Operation", 
-		new XAttribute("Class", "PatchOperationConditional"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/iconPath"), 
-		new XElement("nomatch", 
-		new XAttribute("Class", "PatchOperationAdd"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
-		new XElement("value", 
-		new XElement("iconPath")))), 
-		// Change the iconpath
-		new XElement("Operation", 
-		new XAttribute("Class", "PatchOperationReplace"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/iconPath"), 
-		new XElement("value", 
-		new XElement("iconPath", iconPath))), 
-		// Add The Inheritable if missing
-		new XElement("Operation", 
-		new XAttribute("Class", "PatchOperationConditional"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/inheritable"), 
-		new XElement("nomatch", 
-		new XAttribute("Class", "PatchOperationAdd"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
-		new XElement("value", 
-		new XElement("inheritable")))), 
-		// Change The Inheritable
-		new XElement("Operation", 
-		new XAttribute("Class", "PatchOperationReplace"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/inheritable"), 
-		new XElement("value", 
-		new XElement("inheritable", inheritable)))));
+		//string iconPath = existingXenotype.iconPath; //Was just replaceing the icon path with the same icon path
+		// My Newer way
+        XDocument xDocument = new(new XElement("Patch"));
 
 		XElement xElement = xDocument.Element("Patch");
-		//Replace Xenotype Name
 
+		// Patch the name of the Xenotype
 		if (xenotypeName.Length != 0)
 		{
 			xElement.Add(new XElement("Operation", 
 			new XAttribute("Class", "PatchOperationConditional"), 
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/label"), 
-			new XElement("nomatch", 
-			new XAttribute("Class", "PatchOperationAdd"), 
+			new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
-			new XElement("value", 
-			new XElement("label")))), 
-			new XElement("Operation", 
-			new XAttribute("Class", "PatchOperationReplace"), 
+			new XElement("value", new XElement("label", xenotypeName))), 
+			new XElement("match", new XAttribute("Class", "PatchOperationReplace"), 
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/label"), 
-			new XElement("value", 
-			new XElement("label", xenotypeName))));
+			new XElement("value", new XElement("label", xenotypeName)))));
 		}
-		//Replace Description
+		// Patch the description of the Xenotype
 		if (description.Length != 0)
 		{
 			xElement.Add(new XElement("Operation", 
@@ -271,12 +233,12 @@ public static class XenotypeExporter
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/description"), 
 			new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
-			new XElement("value", new XElement("description")))), 
-			new XElement("Operation", new XAttribute("Class", "PatchOperationReplace"), 
+			new XElement("value", new XElement("description", description))), 
+			new XElement("match", new XAttribute("Class", "PatchOperationReplace"), 
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/description"), 
-			new XElement("value", new XElement("description", description))));
+			new XElement("value", new XElement("description", description)))));
 		}
-		//Replace Short Description
+		// Patch the description of the Xenotype
 		if (descriptionShort.Length != 0)
 		{
 			xElement.Add(new XElement("Operation", 
@@ -284,11 +246,44 @@ public static class XenotypeExporter
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/descriptionShort"), 
 			new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
-			new XElement("value", new XElement("descriptionShort")))), 
-			new XElement("Operation", new XAttribute("Class", "PatchOperationReplace"), 
+			new XElement("value", new XElement("descriptionShort", descriptionShort))), 
+			new XElement("match", new XAttribute("Class", "PatchOperationReplace"), 
 			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/descriptionShort"), 
-			new XElement("value", new XElement("descriptionShort", descriptionShort))));
+			new XElement("value", new XElement("descriptionShort", descriptionShort)))));
 		}
+		// Patch the Inheritable of the Xenotype
+		xElement.Add(new XElement("Operation", 
+		new XAttribute("Class", "PatchOperationConditional"), 
+		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/inheritable"), 
+		new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
+		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
+		new XElement("value", new XElement("inheritable", inheritable))), 
+		new XElement("match", new XAttribute("Class", "PatchOperationReplace"), 
+		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/inheritable"), 
+		new XElement("value", new XElement("inheritable", inheritable)))));
+		// Patch the Genes of the Xenotype
+		if (!geneList.Empty())
+		{
+			Log.Error("Need to recreate (Also there was No MayRequire at all for the orginal one)");
+			xElement.Add(new XElement("Operation", 
+			new XAttribute("Class", "PatchOperationConditional"), 
+			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/genes"), 
+			new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
+			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
+			new XElement("value", new XElement("genes"))))); XElement xElement2 = new("genes");
+			foreach (GeneDef gene in geneList)
+			{
+				xElement2.Add(new XElement("li", gene.defName));
+			}
+
+
+			new XElement("match", new XAttribute("Class", "PatchOperationReplace"), 
+			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/inheritable"), 
+			new XElement("value", new XElement("genes", xElement2)));
+		}
+
+
+		/*
 		//Replace Genes
 		xElement.Add(new XElement("Operation", 
 		new XAttribute("Class", "PatchOperationConditional"), 
@@ -296,15 +291,15 @@ public static class XenotypeExporter
 		new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
 		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
 		new XElement("value", new XElement("genes")))));
-		XElement xElement2 = new XElement("genes");
+		XElement xxElement2 = new XElement("genes");
 		foreach (GeneDef gene in geneList)
 		{
-			xElement2.Add(new XElement("li", gene.defName));
+			xxElement2.Add(new XElement("li", gene.defName));
 		}
 		xElement.Add(new XElement("Operation", 
 		new XAttribute("Class", "PatchOperationReplace"), 
 		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/genes"), 
-		new XElement("value", xElement2)));
+		new XElement("value", xxElement2)));*/
 		xDocument.Save(fileName);
 	}
 }
