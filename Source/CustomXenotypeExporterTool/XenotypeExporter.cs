@@ -169,7 +169,14 @@ public static class XenotypeExporter
 			iconPath = DefDatabase<XenotypeDef>.GetNamed(xenotypeName).iconPath; 
 		}
 
-		XElement xElement = new XElement("XenotypeDef", new XElement("defName", "GegeXT_" + xenotypeName.Replace(" ", "")), new XElement("label", xenotypeName), new XElement("description", description), new XElement("descriptionShort", descriptionShort), new XElement("iconPath", iconPath), new XElement("inheritable", inheritable), new XElement("genes"));
+		XElement xElement = new XElement("XenotypeDef", 
+		new XElement("defName", "GegeXT_" + xenotypeName.Replace(" ", "")), 
+		new XElement("label", xenotypeName), 
+		new XElement("description", description), 
+		new XElement("descriptionShort", descriptionShort), 
+		new XElement("iconPath", iconPath), 
+		new XElement("inheritable", inheritable), 
+		new XElement("genes"));
 		XElement xElement2 = xElement.Element("genes");
 		AddGeneToListXML(xElement2,geneList);
 		return xElement;
@@ -264,42 +271,22 @@ public static class XenotypeExporter
 		// Patch the Genes of the Xenotype
 		if (!geneList.Empty())
 		{
-			Log.Error("Need to recreate (Also there was No MayRequire at all for the orginal one)");
+			XElement xElement2 = new XElement("genes");
+			AddGeneToListXML(xElement2,geneList);
+
 			xElement.Add(new XElement("Operation", 
-			new XAttribute("Class", "PatchOperationConditional"), 
-			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/genes"), 
-			new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
-			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
-			new XElement("value", new XElement("genes"))))); XElement xElement2 = new("genes");
-			foreach (GeneDef gene in geneList)
-			{
-				xElement2.Add(new XElement("li", gene.defName));
-			}
-
-
-			new XElement("match", new XAttribute("Class", "PatchOperationReplace"), 
-			new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/inheritable"), 
-			new XElement("value", new XElement("genes", xElement2)));
+				new XAttribute("Class", "PatchOperationConditional"), 
+				new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/genes"), 
+				new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
+					new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
+					new XElement("value", xElement2)
+				),
+				new XElement("match", new XAttribute("Class", "PatchOperationReplace"), 
+					new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/genes"), 
+					new XElement("value", xElement2)
+				))
+			);
 		}
-
-
-		/*
-		//Replace Genes
-		xElement.Add(new XElement("Operation", 
-		new XAttribute("Class", "PatchOperationConditional"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/genes"), 
-		new XElement("nomatch", new XAttribute("Class", "PatchOperationAdd"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]"), 
-		new XElement("value", new XElement("genes")))));
-		XElement xxElement2 = new XElement("genes");
-		foreach (GeneDef gene in geneList)
-		{
-			xxElement2.Add(new XElement("li", gene.defName));
-		}
-		xElement.Add(new XElement("Operation", 
-		new XAttribute("Class", "PatchOperationReplace"), 
-		new XElement("xpath", "Defs/XenotypeDef[defName=\"" + existingXenotype.defName + "\"]/genes"), 
-		new XElement("value", xxElement2)));*/
 		xDocument.Save(fileName);
 	}
 }
