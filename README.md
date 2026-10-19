@@ -11,14 +11,14 @@ Adds a way to export custom xenotypes for easy conversion to modded xenotypes. T
 * Step 5B: If you chose option B, enable a local mod called ExportedXenotypeStorageModFolder. This will allow you to use your newly created xenotype.
 
 # Notes:
-This mod doesn’t automatically remove your custom xenotype when exporting it.
-You can export as many xenotypes as you like. They will all be stored in ExportedXenotypeStorageModFolder/1.4/Defs/XenotypeDefs.
-You will have to restart the game every time you export to the local Mods folder to see the results.
-This mod is not neccessary for ExportedXenotypeStorageModFolder mod to function.
-If you create xenotypes using modded genes or icons and then remove the mod that added those genes or icons, the game will throw errors. You will have to remove the problematic xenotype manually.
-Exporting a xenotype with a name that was already exported will overwrite the previous file.
-This mod allows for arguably faster creation of other Xenotype mods, as Xenotype Editor is more practical than just editing XMLs.
-The functionality of this mod on non-Windows systems has not been tested.
+* This mod doesn’t automatically remove your custom xenotype when exporting it.
+* You can export as many xenotypes as you like. They will all be stored in ExportedXenotypeStorageModFolder/1.4/Defs/XenotypeDefs.
+* You will have to restart the game every time you export to the local Mods folder to see the results.
+* This mod is not neccessary for ExportedXenotypeStorageModFolder mod to function.
+* Createing a xenotypes using modded genes or icons and then remove the mod that added those genes or icons, the game might throw errors. You will have to remove the problematic xenotype manually.
+* Exporting a xenotype with a name that was already exported will overwrite the previous file.
+* This mod allows for arguably faster creation of other Xenotype mods, as Xenotype Editor is more practical than just editing XMLs.
+* The functionality of this mod on non-Windows systems has not been tested.
 
 # Credits:
 Harmony library – Brrainz
