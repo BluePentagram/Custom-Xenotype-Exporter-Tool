@@ -171,22 +171,27 @@ public static class XenotypeExporter
 
 		XElement xElement = new XElement("XenotypeDef", new XElement("defName", "GegeXT_" + xenotypeName.Replace(" ", "")), new XElement("label", xenotypeName), new XElement("description", description), new XElement("descriptionShort", descriptionShort), new XElement("iconPath", iconPath), new XElement("inheritable", inheritable), new XElement("genes"));
 		XElement xElement2 = xElement.Element("genes");
+		AddGeneToListXML(xElement2,geneList);
+		return xElement;
+	}
 
+	private static void AddGeneToListXML(XElement Genes, List<GeneDef> geneList)
+	{
 		var geneAddedByCode = new List<GeneDef>();
 		foreach (GeneDef gene in geneList)
 		{
 			if (gene.modContentPack == null)
 			{
-				xElement2.Add(new XElement("li", gene.defName)); // C# Added Gene that does not have modContentPack
+				Genes.Add(new XElement("li", gene.defName)); // C# Added Gene that does not have modContentPack
 				geneAddedByCode.Add(gene);
 				continue;
 			}
 			if (gene.modContentPack.IsCoreMod || gene.modContentPack.PackageId == "ludeon.rimworld.biotech")
 			{
-				xElement2.Add(new XElement("li", gene.defName)); //No additional DLC or Mod's need to be enabled for these versions
+				Genes.Add(new XElement("li", gene.defName)); //No additional DLC or Mod's need to be enabled for these versions
 				continue;
 			}
-			xElement2.Add(new XElement("li", new XAttribute("MayRequire", gene.modContentPack.PackageId), gene.defName)); // additional DLC or Mod's need to be enabled for these versions
+			Genes.Add(new XElement("li", new XAttribute("MayRequire", gene.modContentPack.PackageId), gene.defName)); // additional DLC or Mod's need to be enabled for these versions
 		}
 		if (!geneAddedByCode.Empty())
 		{
@@ -196,7 +201,6 @@ public static class XenotypeExporter
 				Log.Message(genestring);
 			}
 		}
-		return xElement;
 	}
 
 	public static void GeneratePatchFile(string xenotypeName, XenotypeIconDef icon, string description, string descriptionShort, List<GeneDef> geneList, bool inheritable, string patchesFolderLocation)
