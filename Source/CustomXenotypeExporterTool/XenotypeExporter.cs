@@ -182,7 +182,7 @@ public static class XenotypeExporter
 		{
 			if (gene.modContentPack == null)
 			{
-				Genes.Add(new XElement("li", gene.defName)); // C# Added Gene that does not have modContentPack
+				Genes.Add(new XElement("li", new XAttribute("MayRequire", "ludeon.rimworld"), gene.defName)); // C# Added Gene that does not have modContentPack
 				geneAddedByCode.Add(gene);
 				continue;
 			}
@@ -195,7 +195,7 @@ public static class XenotypeExporter
 		}
 		if (!geneAddedByCode.Empty())
 		{
-			Log.Error("Exported Xenotype has genes have a Mod ID mostly due to be made by code functions. Printed Below");
+			Log.Error("Exported Xenotype has genes that don't have any packageID, reason being it was mostly added by code that depends on other mods, they have been marked as useing base game package. Printed Below.");
 			foreach (GeneDef genestring in geneAddedByCode)
 			{
 				Log.Message(genestring);
