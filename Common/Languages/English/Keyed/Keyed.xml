@@ -12,4 +12,5 @@
 	<ChooseExistingXenotype>Choose an existing xenotype</ChooseExistingXenotype>
 	<ExportAsPatchToLocalModsFolder>Export as a patch to local Mods folder</ExportAsPatchToLocalModsFolder>
 	<OpenExportedFolder>Open export folder</OpenExportedFolder>
+	<ExportGenePackageIDError>Xenotype has genes that don't have any packageID, most likely added by C# and can depend on multiple mods, should still be safe but might give error's on mod changes, marked as "ludeon.rimworld" manual changeing might be required. Genes Printed Below.</ExportGenePackageIDError>
 </LanguageData>

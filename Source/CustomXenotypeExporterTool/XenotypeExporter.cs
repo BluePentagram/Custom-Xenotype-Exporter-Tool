@@ -202,7 +202,7 @@ public static class XenotypeExporter
 		}
 		if (!geneAddedByCode.Empty())
 		{
-			Log.Error("Exported Xenotype has genes that don't have any packageID, reason being it was mostly added by code that depends on other mods, they have been marked as useing base game package. Printed Below.");
+			Log.Error("ExportGenePackageIDError".Translate());
 			foreach (GeneDef genestring in geneAddedByCode)
 			{
 				Log.Message(genestring);
